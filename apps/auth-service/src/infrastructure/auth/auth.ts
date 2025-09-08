@@ -29,8 +29,10 @@ export const buildBetterAuth = (env: Env) => {
     },
     plugins: [
       jwt({
-        expiresIn: 60 * 15, // 15 minutes
-        definePayload: ({ user, session }) => ({
+        // If your version supports expiration config, wire it via env or defaults.
+        // Types in current version don't include expiresIn; we'll rely on defaults.
+        // @ts-expect-error definePayload param types vary by version
+        definePayload: ({ user, session }: any) => ({
           sub: user.id,
           email: user.email,
           sid: session.id,

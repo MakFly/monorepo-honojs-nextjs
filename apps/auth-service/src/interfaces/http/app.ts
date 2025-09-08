@@ -1,6 +1,6 @@
 import { Hono } from 'hono';
 import { cors } from 'hono/cors';
-import type { RoutesRegistrar } from '../../infrastructure/build';
+import type { RoutesRegistrar } from '../../types/http';
 
 type CreateAppDeps = {
   cors: { trustedOrigins: string[] };
@@ -23,4 +23,3 @@ export const createApp = ({ cors: corsCfg, routes }: CreateAppDeps) => {
 
   return app;
 };
-
