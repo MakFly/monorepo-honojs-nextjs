@@ -4,6 +4,7 @@ import type { SessionService } from '../core/services/session';
 import type { Session } from '../types/session';
 import { registerAuthRoutes } from '../interfaces/http/routes/auth';
 import { registerMeRoutes } from '../interfaces/http/routes/me';
+import { registerHealthRoutes } from '../interfaces/http/routes/health';
 import type { RoutesRegistrar } from '../types/http';
 
 export const buildDependencies = (env: Env) => {
@@ -16,6 +17,7 @@ export const buildDependencies = (env: Env) => {
   };
 
   const routes: RoutesRegistrar = (app) => {
+    registerHealthRoutes(app);
     registerMeRoutes(app, { sessionService });
     registerAuthRoutes(app, { authHandler: auth.handler });
   };
