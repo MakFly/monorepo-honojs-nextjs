@@ -1,4 +1,5 @@
 import type { Context } from 'hono';
+import { StatusCode } from 'hono/utils/http-status';
 import type { ProblemDetail } from '../../types/problem';
 
 /**
@@ -12,6 +13,6 @@ export function problem(c: Context, p: ProblemDetail) {
   };
   // Explicitly mark as Problem JSON
   c.header('Content-Type', 'application/problem+json; charset=utf-8');
-  return c.body(JSON.stringify(body), p.status);
+  c.status(p.status as StatusCode);
+  return c.body(JSON.stringify(body));
 }
-
