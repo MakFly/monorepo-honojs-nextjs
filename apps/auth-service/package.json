@@ -9,6 +9,7 @@
     "lint": "echo 'Linting auth-service...'",
     "prisma:gen": "prisma generate",
     "prisma:mig": "prisma migrate dev --name init",
+    "prisma:push": "prisma db push",
     "ba:gen": "npx @better-auth/cli generate",
     "ba:migrate": "npx @better-auth/cli migrate"
   },

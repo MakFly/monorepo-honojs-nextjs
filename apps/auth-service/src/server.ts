@@ -1,35 +1,16 @@
 import { serve } from '@hono/node-server';
-import { Hono } from 'hono';
-import { cors } from 'hono/cors';
-import { auth } from './auth';
+import { createApp } from './interfaces/http/app';
+import { env } from './config/env';
+import { buildDependencies } from './infrastructure/build';
 
-const app = new Hono();
-
-const trustedOrigins = process.env.TRUSTED_ORIGINS?.split(',') || [];
-
-app.use(
-  '/api/*',
-  cors({
-    origin: trustedOrigins,
-    credentials: true,
-  })
-);
-
-app.get('/api/me', async (c) => {
-  const session = await auth.api.getSession({
-    headers: c.req.raw.headers,
-  });
-
-  if (!session) {
-    return c.json({ error: 'Unauthorized' }, 401);
-  }
-
-  return c.json(session.user);
+// Composition root: build infra and create the HTTP app
+const deps = buildDependencies(env);
+const app = createApp({
+  cors: { trustedOrigins: env.TRUSTED_ORIGINS },
+  routes: deps.routes,
 });
 
-app.on(['GET', 'POST', 'PUT', 'DELETE'], '/api/auth/*', auth.handler);
-
-const port = 4001;
+const port = env.PORT;
 console.log(`Auth service running on port ${port}`);
 
 serve({
