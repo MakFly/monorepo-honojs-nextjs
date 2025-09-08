@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:16
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: app
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  auth-service:
+    build:
+      context: ./apps/auth-service
+    ports:
+      - "4001:4001"
+    depends_on:
+      - db
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@db:5432/app
+      - BETTER_AUTH_SECRET=changeme_long_random_strong_secret_key
+      - BETTER_AUTH_URL=http://localhost:4001
+      - TRUSTED_ORIGINS=http://localhost:3000
+      - COOKIE_DOMAIN=localhost
+      - NODE_ENV=development
+    command: pnpm dev
+
+  web:
+    build:
+      context: ./apps/web
+    ports:
+      - "3000:3000"
+    depends_on:
+      - auth-service
+    environment:
+      - NEXT_PUBLIC_AUTH_URL=http://localhost:4001
+      - NODE_ENV=development
+    command: pnpm dev
+
+volumes:
+  postgres_data:

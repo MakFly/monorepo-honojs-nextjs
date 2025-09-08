@@ -1,0 +1,21 @@
+{
+  "name": "monorepo",
+  "private": true,
+  "scripts": {
+    "build": "pnpm -r build",
+    "dev": "pnpm -r --parallel dev",
+    "lint": "pnpm -r lint",
+    "format": "prettier --write \"**/*.{ts,tsx,md,json}\""
+  },
+  "devDependencies": {
+    "prettier": "^3.2.5",
+    "typescript": "^5.4.5"
+  },
+  "packageManager": "pnpm@9.1.0",
+  "pnpm": {
+    "overrides": {
+      "@types/react": "19.1.12",
+      "@types/react-dom": "19.1.9"
+    }
+  }
+}
