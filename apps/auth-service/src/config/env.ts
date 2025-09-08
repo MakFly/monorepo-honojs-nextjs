@@ -32,5 +32,5 @@ export const env: Env = Object.freeze({
 
 // Ensure Prisma can read the SQLite URL without requiring a .env
 if (!process.env.DATABASE_URL) {
-  process.env.DATABASE_URL = (env as any).DATABASE_URL;
+  process.env.DATABASE_URL = env.DATABASE_URL;
 }
